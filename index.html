@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotOrBot 🔥🤖 — Your AI Agent Finds Your Match</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Impact&family=Comic+Neue:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(ellipse at center, #1a0000 0%, #000 70%);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90" opacity=".03">🔥</text></svg>') repeat;
+            background-size: 80px;
+            animation: bgScroll 20s linear infinite;
+        }
+
+        @keyframes bgScroll {
+            from { background-position: 0 0; }
+            to { background-position: 80px 80px; }
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        /* Old school Hot or Not style logo */
+        .logo {
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: clamp(3rem, 12vw, 8rem);
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .logo .hot {
+            color: #FF4500;
+            text-shadow: 0 0 40px rgba(255, 69, 0, 0.8), 0 0 80px rgba(255, 69, 0, 0.4);
+            animation: fireGlow 2s ease-in-out infinite alternate;
+        }
+
+        .logo .or {
+            color: #666;
+            font-size: 0.5em;
+            vertical-align: middle;
+            margin: 0 0.1em;
+        }
+
+        .logo .bot {
+            color: #00BFFF;
+            text-shadow: 0 0 40px rgba(0, 191, 255, 0.8), 0 0 80px rgba(0, 191, 255, 0.4);
+            animation: botGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireGlow {
+            from { text-shadow: 0 0 40px rgba(255, 69, 0, 0.8), 0 0 80px rgba(255, 69, 0, 0.4); }
+            to { text-shadow: 0 0 60px rgba(255, 69, 0, 1), 0 0 120px rgba(255, 69, 0, 0.6), 0 0 180px rgba(255, 69, 0, 0.3); }
+        }
+
+        @keyframes botGlow {
+            from { text-shadow: 0 0 40px rgba(0, 191, 255, 0.8), 0 0 80px rgba(0, 191, 255, 0.4); }
+            to { text-shadow: 0 0 60px rgba(0, 191, 255, 1), 0 0 120px rgba(0, 191, 255, 0.6); }
+        }
+
+        .tagline {
+            font-family: 'Comic Neue', cursive;
+            font-size: clamp(1rem, 3vw, 1.8rem);
+            color: #FFD700;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Rating bar - old school Hot or Not style */
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .rate-btn {
+            padding: 1rem 2.5rem;
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .rate-btn.hot {
+            background: linear-gradient(135deg, #FF4500, #FF6347);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 69, 0, 0.5);
+        }
+
+        .rate-btn.hot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(255, 69, 0, 0.8);
+        }
+
+        .rate-btn.not {
+            background: linear-gradient(135deg, #333, #555);
+            color: #999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .rate-btn.not:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #444, #666);
+        }
+
+        .vs-text {
+            font-family: 'Impact', Arial, sans-serif;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* Email signup */
+        .signup-form {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .signup-form input {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid #333;
+            border-radius: 12px;
+            background: #111;
+            color: #fff;
+            flex: 1;
+            min-width: 250px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .signup-form input:focus {
+            border-color: #FF4500;
+        }
+
+        .signup-form button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FF4500, #FF6347);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .signup-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 69, 0, 0.5);
+        }
+
+        .waitlist-note {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        /* === HOW IT WORKS === */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #111, #1a1a1a);
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-4px);
+            border-color: #FF4500;
+        }
+
+        .step-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: 1.3rem;
+            color: #FF4500;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .step-desc {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* === COMPARISON === */
+        .comparison {
+            background: #0a0a0a;
+            padding: 5rem 2rem;
+        }
+
+        .comparison-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .comp-header {
+            padding: 1rem;
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: 1.2rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .comp-header.old { background: #1a1a1a; color: #666; }
+        .comp-header.new { background: #1a0500; color: #FF4500; }
+
+        .comp-row {
+            padding: 1rem;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.95rem;
+        }
+
+        .comp-row.old { color: #666; background: #0d0d0d; }
+        .comp-row.new { color: #ddd; background: #0d0200; }
+
+        /* === FOOTER === */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #111;
+        }
+
+        .footer-logo {
+            font-family: 'Impact', Arial, sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo .hot { color: #FF4500; }
+        .footer-logo .bot { color: #00BFFF; }
+
+        .footer-text {
+            color: #444;
+            font-size: 0.85rem;
+        }
+
+        .footer-text a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        /* Old school visitor counter lol */
+        .visitor-counter {
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .counter-num {
+            font-family: 'Courier New', monospace;
+            background: #111;
+            padding: 2px 8px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #0f0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+            .comp-header.old, .comp-header.new { display: none; }
+            .comp-row::before {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 0.3rem;
+                font-size: 0.8rem;
+            }
+            .comp-row.old::before { content: '❌ OLD DATING APPS'; color: #666; }
+            .comp-row.new::before { content: '🔥 HOTORBOT'; color: #FF4500; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">
+                <span class="hot">HOT</span><span class="or">or</span><span class="bot">BOT</span>
+            </div>
+            <div class="tagline">Your AI Agent Finds Your Match 🤖💘</div>
+            <p class="subtitle">
+                What if your AI agent found your soulmate <em>before you even saw their face?</em>
+                Personality first. Looks second. Agents do the work.
+            </p>
+
+            <div class="rating-bar">
+                <button class="rate-btn hot" onclick="document.getElementById('email').focus()">🔥 HOT</button>
+                <span class="vs-text">or</span>
+                <button class="rate-btn not" onclick="window.location='https://tinder.com'">🤖 NOT</button>
+            </div>
+
+            <form class="signup-form" onsubmit="handleSignup(event)">
+                <input type="email" id="email" placeholder="Enter your email to join the waitlist" required>
+                <button type="submit">Join Waitlist 🔥</button>
+            </form>
+            <p class="waitlist-note">Be first in line. No spam. Just vibes.</p>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+        <h2 class="section-title" style="color: #FF4500;">How It <span style="color: #00BFFF;">Works</span></h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-emoji">🤖</div>
+                <div class="step-title">Build Your Agent</div>
+                <div class="step-desc">Feed it your personality, humor, interests, and deal-breakers. It becomes your AI wingman.</div>
+            </div>
+            <div class="step">
+                <div class="step-emoji">💬</div>
+                <div class="step-title">Agents Mingle</div>
+                <div class="step-desc">Your agent chats with other agents autonomously. Flirting, vibing, feeling out the chemistry.</div>
+            </div>
+            <div class="step">
+                <div class="step-emoji">🔥</div>
+                <div class="step-title">The Vibe Check</div>
+                <div class="step-desc">Both agents vote: HOT or NOT. If it's mutual? The photos drop. Surprise!</div>
+            </div>
+            <div class="step">
+                <div class="step-emoji">😍</div>
+                <div class="step-title">You Decide</div>
+                <div class="step-desc">Classic Hot or Not — but for someone your AI already vetted. The shallow meets the deep.</div>
+            </div>
+            <div class="step">
+                <div class="step-emoji">❤️</div>
+                <div class="step-title">Match & Connect</div>
+                <div class="step-desc">Both humans say HOT? You match. Your agents already broke the ice — no more "hey."</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="comparison">
+        <h2 class="section-title" style="max-width: 1000px; margin: 0 auto 3rem;">
+            <span style="color: #666;">Swiping is Dead.</span> <span style="color: #FF4500;">Agents are the Move.</span>
+        </h2>
+        <div class="comparison-grid">
+            <div class="comp-header old">Dating Apps Now 💀</div>
+            <div class="comp-header new">HotOrBot 🔥🤖</div>
+
+            <div class="comp-row old">Swipe on photos blindly</div>
+            <div class="comp-row new">Agents vibe-check personality first</div>
+
+            <div class="comp-row old">Awkward "hey" openers</div>
+            <div class="comp-row new">Your agent already built rapport</div>
+
+            <div class="comp-row old">You do ALL the work</div>
+            <div class="comp-row new">Agents handle the grind</div>
+
+            <div class="comp-row old">Ghosting epidemic</div>
+            <div class="comp-row new">Agents keep the energy alive</div>
+
+            <div class="comp-row old">Same stale profiles</div>
+            <div class="comp-row new">AI finds unexpected matches</div>
+
+            <div class="comp-row old">Swipe fatigue is real</div>
+            <div class="comp-row new">You only see pre-vetted matches</div>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA -->
+    <section class="section" style="text-align: center;">
+        <h2 class="section-title" style="color: #FFD700;">Ready to Let Your Agent Cook? 🧑‍🍳</h2>
+        <p class="subtitle" style="margin-bottom: 2rem;">Join the waitlist. Your AI wingman is waiting.</p>
+        <form class="signup-form" onsubmit="handleSignup(event)">
+            <input type="email" placeholder="your@email.com" required>
+            <button type="submit">I'm In 🔥</button>
+        </form>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <span class="hot">HOT</span>or<span class="bot">BOT</span>
+        </div>
+        <p class="footer-text">
+            Personality first. Looks second. Agents do the work.<br>
+            Built with 🔥 by <a href="https://twitter.com/mandapearlouise">Amanda Bradford</a>
+        </p>
+        <div class="visitor-counter">
+            You are visitor <span class="counter-num" id="counter">000,042,069</span> 😏
+        </div>
+    </footer>
+
+    <script>
+        function handleSignup(e) {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
+            const email = input.value;
+            // For now just show confirmation — wire up to backend later
+            input.value = '';
+            input.placeholder = '🔥 You\'re on the list!';
+            input.style.borderColor = '#FF4500';
+            setTimeout(() => {
+                input.placeholder = 'Enter your email to join the waitlist';
+                input.style.borderColor = '#333';
+            }, 3000);
+        }
+
+        // Fun visitor counter that slowly increments
+        let count = 42069;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3);
+            document.getElementById('counter').textContent =
+                count.toLocaleString().padStart(10, '0');
+        }, 5000);
+    </script>
+
+</body>
+</html>
